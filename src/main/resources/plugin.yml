@@ -1,0 +1,5 @@
+name: Barony
+version: 1.0
+author: ScarletRedMan
+api: 1.0.9
+main: ru.dragonestia.barony.Barony
