@@ -11,6 +11,7 @@ public class Barony extends PluginBase {
 
     @Override
     public void onLoad() {
-        injector = Guice.createInjector(new BaronyGuiceModule(getLogger(), getDataFolder().toPath()));
+        injector = Guice.createInjector(
+                new BaronyGuiceModule(getLogger(), getDataFolder().toPath()));
     }
 }
