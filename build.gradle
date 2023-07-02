@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.diffplug.spotless' version '6.19.0'
 }
 
 group = 'ru.dragonestia'
@@ -23,4 +24,35 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+tasks {
+    java {
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    compileJava {
+        options.encoding = "UTF-8"
+    }
+
+    compileTestJava {
+        options.encoding = "UTF-8"
+    }
+}
+
+spotless {
+    format 'misc', {
+        target '*.gradle', '*.md', '.gitignore'
+        trimTrailingWhitespace()
+        indentWithSpaces(4)
+        endWithNewline()
+    }
+
+    java {
+        palantirJavaFormat()
+        formatAnnotations()
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
 }
