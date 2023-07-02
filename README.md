@@ -8,4 +8,9 @@
 Также в проект входит инструментарий для создания и редактирования карт,
 мелких объектов и структур.
 
-Цель проекта: перенести механики из игры [Barony](https://store.steampowered.com/app/371970/Barony/) в Minecraft.
+Цель проекта: перенести механики из игры [Barony](https://store.steampowered.com/app/371970/Barony/)
+в Minecraft.
+
+## Задачи проекта
+Все задачи находятся на [Trello](https://trello.com/b/Bb06beZG/mcbarony) проекта.
+В описании каждой задачи должна присутствовать ссылка на issue в GitHub.
