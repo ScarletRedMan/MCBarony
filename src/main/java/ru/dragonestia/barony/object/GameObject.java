@@ -12,4 +12,8 @@ public interface GameObject {
     default void placeForEditor(@NotNull GridPlacer.Placement placement) {
         placeForGame(placement);
     }
+
+    default boolean canBreak() {
+        return false;
+    }
 }
