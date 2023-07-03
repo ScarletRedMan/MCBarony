@@ -1,6 +1,8 @@
 package ru.dragonestia.barony.level.generator;
 
 import cn.nukkit.level.ChunkManager;
+import cn.nukkit.level.GameRule;
+import cn.nukkit.level.GameRules;
 import cn.nukkit.math.Vector3;
 import org.jetbrains.annotations.NotNull;
 import ru.dragonestia.barony.level.grid.GridPlacer;
@@ -84,5 +86,16 @@ public class StructureViewGenerator implements PrettyGenerator {
     @Override
     public Vector3 spawn() {
         return new Vector3(2.5, Y_FLOOR + 3, 2.5);
+    }
+
+    @Override
+    public GameRules gameRules() {
+        var rules = PrettyGenerator.super.gameRules();
+        rules.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
+        rules.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+        rules.setGameRule(GameRule.SHOW_DEATH_MESSAGES, false);
+        rules.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
+        rules.setGameRule(GameRule.NATURAL_REGENERATION, false);
+        return rules;
     }
 }
