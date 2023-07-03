@@ -6,36 +6,26 @@ import cn.nukkit.event.level.LevelLoadEvent;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.format.LevelProvider;
 import cn.nukkit.math.Vector3;
+import java.io.File;
+import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 import ru.dragonestia.barony.level.generator.PrettyGenerator;
 import ru.dragonestia.barony.level.provider.InMemoryLevelProvider;
 
-import java.io.File;
-import java.util.UUID;
-
 public final class LevelLoader {
 
-    private LevelLoader() {
-
-    }
+    private LevelLoader() {}
 
     public static Level createInMemoryLevel(@NotNull PrettyGenerator generator) {
         var server = Server.getInstance();
         var provider = new InMemoryLevelProvider(generator);
         Level level;
         try {
-            var constructor = Level.class.getDeclaredConstructor(Server.class,
-                    String.class,
-                    File.class,
-                    boolean.class,
-                    LevelProvider.class);
+            var constructor = Level.class.getDeclaredConstructor(
+                    Server.class, String.class, File.class, boolean.class, LevelProvider.class);
 
             constructor.setAccessible(true);
-            level = constructor.newInstance(server,
-                    "InMemory_" + UUID.randomUUID(),
-                    new File("./"),
-                    true,
-                    provider);
+            level = constructor.newInstance(server, "InMemory_" + UUID.randomUUID(), new File("./"), true, provider);
             provider.setLevel(level);
         } catch (Exception ex) {
             throw new RuntimeException(ex);

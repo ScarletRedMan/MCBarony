@@ -11,14 +11,14 @@ import ru.dragonestia.barony.object.editor.EditorFloorObj;
 
 public class StructureViewGenerator implements PrettyGenerator {
 
-    public final static int Y_FLOOR = 0;
-    public final static int OBJECTS_PER_CHUNK = 16 / 3 + 1;
+    public static final int Y_FLOOR = 0;
+    public static final int OBJECTS_PER_CHUNK = 16 / 3 + 1;
 
     private final int xSize, ySize, zSize;
     private final GameObject floorObj = new EditorFloorObj();
     private final GameObject borderObj = new EditorBorderObj();
     private final GridPlacer.Mode mode;
-    private final GameObject[][][] objects; //XZY
+    private final GameObject[][][] objects; // XZY
 
     public StructureViewGenerator(int xSize, int ySize, int zSize, GridPlacer.Mode mode, GameObject[][][] objects) {
         this.xSize = xSize;
@@ -68,7 +68,7 @@ public class StructureViewGenerator implements PrettyGenerator {
                 } else {
                     gridPlacer.place(floorPos, floorObj);
 
-                    //placing objects
+                    // placing objects
                     for (int i = 0; i < ySize; i++) {
                         var obj = objects[floorPos.x() - 1][floorPos.z() - 1][i];
 

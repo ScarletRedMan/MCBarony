@@ -1,19 +1,18 @@
 package ru.dragonestia.barony.object.registry;
 
-import org.jetbrains.annotations.NotNull;
-import ru.dragonestia.barony.di.DataFolder;
-import ru.dragonestia.barony.object.GameObject;
-import ru.dragonestia.barony.object.SchematicGameObject;
-import ru.dragonestia.barony.object.serializer.ObjectSerializer;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import org.jetbrains.annotations.NotNull;
+import ru.dragonestia.barony.di.DataFolder;
+import ru.dragonestia.barony.object.GameObject;
+import ru.dragonestia.barony.object.SchematicGameObject;
+import ru.dragonestia.barony.object.serializer.ObjectSerializer;
 
 @Singleton
 public class DiskObjectRegistry implements ObjectRegistry {

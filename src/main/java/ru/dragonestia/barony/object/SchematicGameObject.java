@@ -7,7 +7,7 @@ import ru.dragonestia.barony.level.grid.GridPlacer;
 public class SchematicGameObject implements GameObject {
 
     private final String id;
-    private final BlockState[][][] blocks; //XZY
+    private final BlockState[][][] blocks; // XZY
     private final boolean canBreak;
 
     public SchematicGameObject(@NotNull String id, @NotNull BlockState[][][] blocks, boolean canBreak) {

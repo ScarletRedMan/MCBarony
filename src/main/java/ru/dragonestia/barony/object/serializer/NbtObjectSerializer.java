@@ -3,12 +3,11 @@ package ru.dragonestia.barony.object.serializer;
 import cn.nukkit.blockstate.BlockState;
 import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
-import org.jetbrains.annotations.NotNull;
-import ru.dragonestia.barony.object.SchematicGameObject;
-
-import javax.inject.Singleton;
 import java.io.IOException;
 import java.nio.ByteOrder;
+import javax.inject.Singleton;
+import org.jetbrains.annotations.NotNull;
+import ru.dragonestia.barony.object.SchematicGameObject;
 
 @Singleton
 public class NbtObjectSerializer implements ObjectSerializer {

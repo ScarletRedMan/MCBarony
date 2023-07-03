@@ -1,6 +1,5 @@
 package ru.dragonestia.barony.level.grid;
 
-import cn.nukkit.Player;
 import cn.nukkit.block.Block;
 import cn.nukkit.blockstate.BlockState;
 import cn.nukkit.level.ChunkManager;
@@ -8,8 +7,6 @@ import cn.nukkit.math.Vector3;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import ru.dragonestia.barony.object.GameObject;
-
-import java.util.function.Consumer;
 
 public final class GridPlacer {
 

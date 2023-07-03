@@ -20,7 +20,7 @@ public class FlatGenerator implements PrettyGenerator {
             for (int z = 0; z < 16; z++) {
                 int gz = (chunkZ << 4) + z;
 
-                level.setBlockStateAt(gx , 58, gz, new BlockStone().getCurrentState());
+                level.setBlockStateAt(gx, 58, gz, new BlockStone().getCurrentState());
             }
         }
     }

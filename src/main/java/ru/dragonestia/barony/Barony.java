@@ -6,8 +6,8 @@ import cn.nukkit.plugin.PluginBase;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import ru.dragonestia.barony.di.BaronyGuiceModule;
-import ru.dragonestia.barony.level.provider.InMemoryLevelProvider;
 import ru.dragonestia.barony.level.generator.VoidGenerator;
+import ru.dragonestia.barony.level.provider.InMemoryLevelProvider;
 import ru.dragonestia.barony.object.registry.ObjectRegistry;
 
 public class Barony extends PluginBase {

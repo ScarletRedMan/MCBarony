@@ -5,7 +5,6 @@ import cn.nukkit.block.BlockConcrete;
 import cn.nukkit.utils.DyeColor;
 import org.jetbrains.annotations.NotNull;
 import ru.dragonestia.barony.level.grid.GridPlacer;
-import ru.dragonestia.barony.object.GameObject;
 import ru.dragonestia.barony.object.HiddenGameObject;
 
 public class EditorBorderObj implements HiddenGameObject {

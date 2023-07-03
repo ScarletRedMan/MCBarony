@@ -25,11 +25,6 @@ import cn.nukkit.utils.ChunkException;
 import cn.nukkit.utils.ThreadCache;
 import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import lombok.Getter;
-import lombok.Setter;
-import org.jetbrains.annotations.NotNull;
-import ru.dragonestia.barony.level.generator.PrettyGenerator;
-
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.nio.ByteOrder;
@@ -40,11 +35,20 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.BiConsumer;
 import java.util.stream.IntStream;
+import lombok.Getter;
+import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
+import ru.dragonestia.barony.level.generator.PrettyGenerator;
 
 public class InMemoryLevelProvider implements LevelProvider {
 
-    @Getter @Setter private Level level;
-    @Getter private final String path = "";
+    @Getter
+    @Setter
+    private Level level;
+
+    @Getter
+    private final String path = "";
+
     private final PrettyGenerator generator;
     protected final ConcurrentMap<Long, BaseFullChunk> chunks = new ConcurrentHashMap<>();
     private final ThreadLocal<WeakReference<BaseFullChunk>> lastChunk = new ThreadLocal<>();
@@ -80,12 +84,14 @@ public class InMemoryLevelProvider implements LevelProvider {
     }
 
     @UsedByReflection
-    public static void generate(String path, String name, long seed, Class<? extends Generator> generator) throws IOException {
+    public static void generate(String path, String name, long seed, Class<? extends Generator> generator)
+            throws IOException {
         generate(path, name, seed, generator, new HashMap<>());
     }
 
     @UsedByReflection
-    public static void generate(String path, String name, long seed, Class<? extends Generator> generator, Map<String, String> options) {}
+    public static void generate(
+            String path, String name, long seed, Class<? extends Generator> generator, Map<String, String> options) {}
 
     @UsedByReflection
     public static ChunkSection createChunkSection(int y) {
@@ -98,8 +104,8 @@ public class InMemoryLevelProvider implements LevelProvider {
         if (chunk == null) throw new ChunkException("Invalid Chunk Set");
 
         long timestamp = chunk.getChanges();
-        BiConsumer<BinaryStream, Integer> callback = (stream, subchunks) ->
-                getLevel().chunkRequestCallback(timestamp, x, z, subchunks, stream.getBuffer());
+        BiConsumer<BinaryStream, Integer> callback =
+                (stream, subchunks) -> getLevel().chunkRequestCallback(timestamp, x, z, subchunks, stream.getBuffer());
         return new AsyncTask() {
 
             @Override
@@ -351,7 +357,7 @@ public class InMemoryLevelProvider implements LevelProvider {
 
     protected final BaseFullChunk getThreadLastChunk() {
         var ref = lastChunk.get();
-        return ref == null? null : ref.get();
+        return ref == null ? null : ref.get();
     }
 
     public BaseFullChunk loadChunk(long index, int chunkX, int chunkZ, boolean create) {
@@ -364,7 +370,6 @@ public class InMemoryLevelProvider implements LevelProvider {
     public void putChunk(long index, BaseFullChunk chunk) {
         chunks.put(index, chunk);
     }
-
 
     private static byte[] serializeEntities(BaseChunk chunk) {
         List<CompoundTag> tagList = new ObjectArrayList<>();
@@ -382,7 +387,8 @@ public class InMemoryLevelProvider implements LevelProvider {
 
     private static byte[] serializeBiomes(BaseFullChunk chunk, int sectionCount) {
         var stream = ThreadCache.binaryStream.get().reset();
-        if (chunk instanceof cn.nukkit.level.format.Chunk sectionChunk && sectionChunk.isChunkSection3DBiomeSupported()) {
+        if (chunk instanceof cn.nukkit.level.format.Chunk sectionChunk
+                && sectionChunk.isChunkSection3DBiomeSupported()) {
             var sections = sectionChunk.getSections();
             var len = Math.min(sections.length, sectionCount);
             final var tmpSectionBiomeStream = new BinaryStream[len];
@@ -391,7 +397,8 @@ public class InMemoryLevelProvider implements LevelProvider {
             }
             IntStream.range(0, len).parallel().forEach(i -> {
                 if (sections[i] instanceof ChunkSection3DBiome each) {
-                    var palette = PalettedBlockStorage.createWithDefaultState(Biome.getBiomeIdOrCorrect(chunk.getBiomeId(0, 0) & 0xFF));
+                    var palette = PalettedBlockStorage.createWithDefaultState(
+                            Biome.getBiomeIdOrCorrect(chunk.getBiomeId(0, 0) & 0xFF));
                     var biomeData = each.get3DBiomeDataArray();
                     for (int x = 0; x < 16; x++) {
                         for (int z = 0; z < 16; z++) {
@@ -403,7 +410,8 @@ public class InMemoryLevelProvider implements LevelProvider {
                     }
                     palette.writeTo(tmpSectionBiomeStream[i]);
                 } else {
-                    var palette = PalettedBlockStorage.createWithDefaultState(Biome.getBiomeIdOrCorrect(chunk.getBiomeId(0, 0) & 0xFF));
+                    var palette = PalettedBlockStorage.createWithDefaultState(
+                            Biome.getBiomeIdOrCorrect(chunk.getBiomeId(0, 0) & 0xFF));
                     for (int x = 0; x < 16; x++) {
                         for (int z = 0; z < 16; z++) {
                             int biomeId = Biome.getBiomeIdOrCorrect(chunk.getBiomeId(x, z) & 0xFF);
@@ -419,7 +427,8 @@ public class InMemoryLevelProvider implements LevelProvider {
                 stream.put(tmpSectionBiomeStream[i].getBuffer());
             }
         } else {
-            PalettedBlockStorage palette = PalettedBlockStorage.createWithDefaultState(Biome.getBiomeIdOrCorrect(chunk.getBiomeId(0, 0) & 0xFF));
+            PalettedBlockStorage palette = PalettedBlockStorage.createWithDefaultState(
+                    Biome.getBiomeIdOrCorrect(chunk.getBiomeId(0, 0) & 0xFF));
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
                     int biomeId = Biome.getBiomeIdOrCorrect(chunk.getBiomeId(x, z));
@@ -470,7 +479,9 @@ public class InMemoryLevelProvider implements LevelProvider {
             tmpSubChunkStreams[i] = new BinaryStream(new byte[8192]).reset(); // 8KB
         }
         if (getLevel() != null && getLevel().isAntiXrayEnabled()) {
-            IntStream.range(0, subChunkCount).parallel().forEach(i -> sections[i].writeObfuscatedTo(tmpSubChunkStreams[i], getLevel()));
+            IntStream.range(0, subChunkCount)
+                    .parallel()
+                    .forEach(i -> sections[i].writeObfuscatedTo(tmpSubChunkStreams[i], getLevel()));
         } else {
             IntStream.range(0, subChunkCount).parallel().forEach(i -> sections[i].writeTo(tmpSubChunkStreams[i]));
         }

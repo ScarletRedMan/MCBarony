@@ -5,10 +5,9 @@ import cn.nukkit.level.ChunkManager;
 import cn.nukkit.level.generator.Generator;
 import cn.nukkit.math.NukkitRandom;
 import cn.nukkit.math.Vector3;
-import lombok.Getter;
-
 import java.util.HashMap;
 import java.util.Map;
+import lombok.Getter;
 
 @Getter
 public class VoidGenerator extends Generator {
@@ -33,14 +32,10 @@ public class VoidGenerator extends Generator {
     }
 
     @Override
-    public void generateChunk(int chunkX, int chunkZ) {
-
-    }
+    public void generateChunk(int chunkX, int chunkZ) {}
 
     @Override
-    public void populateChunk(int chunkX, int chunkZ) {
-
-    }
+    public void populateChunk(int chunkX, int chunkZ) {}
 
     @Override
     public Map<String, Object> getSettings() {
