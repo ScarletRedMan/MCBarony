@@ -10,6 +10,11 @@ import ru.dragonestia.barony.object.GameObject;
 public class EditorBorderObj implements GameObject {
 
     @Override
+    public @NotNull String id() {
+        return "dev_border";
+    }
+
+    @Override
     public void placeForGame(@NotNull GridPlacer.Placement placement) {
         placement.fill(new BlockBedrock());
     }

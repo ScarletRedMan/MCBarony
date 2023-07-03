@@ -11,6 +11,11 @@ import ru.dragonestia.barony.object.GameObject;
 public class EditorFloorObj implements GameObject {
 
     @Override
+    public @NotNull String id() {
+        return "dev_floor";
+    }
+
+    @Override
     public void placeForGame(@NotNull GridPlacer.Placement placement) {
         placement.fill(new BlockConcrete(DyeColor.BLACK.getWoolData()));
     }
