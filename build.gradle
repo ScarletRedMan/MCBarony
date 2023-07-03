@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'cn.powernukkitx:powernukkitx:1.19.70-r2'
+    compileOnly 'cn.powernukkitx:powernukkitx:1.19.80-r3'
     implementation 'com.google.inject:guice:5.1.0'
 
     compileOnly 'org.projectlombok:lombok:1.18.26'
