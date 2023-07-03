@@ -5,9 +5,15 @@ import ru.dragonestia.barony.level.grid.GridPlacer;
 
 public interface GameObject {
 
+    @NotNull String id();
+
     void placeForGame(@NotNull GridPlacer.Placement placement);
 
     default void placeForEditor(@NotNull GridPlacer.Placement placement) {
         placeForGame(placement);
+    }
+
+    default boolean canBreak() {
+        return false;
     }
 }

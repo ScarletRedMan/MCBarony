@@ -6,8 +6,14 @@ import cn.nukkit.utils.DyeColor;
 import org.jetbrains.annotations.NotNull;
 import ru.dragonestia.barony.level.grid.GridPlacer;
 import ru.dragonestia.barony.object.GameObject;
+import ru.dragonestia.barony.object.HiddenGameObject;
 
-public class EditorBorderObj implements GameObject {
+public class EditorBorderObj implements HiddenGameObject {
+
+    @Override
+    public @NotNull String id() {
+        return "dev_border";
+    }
 
     @Override
     public void placeForGame(@NotNull GridPlacer.Placement placement) {

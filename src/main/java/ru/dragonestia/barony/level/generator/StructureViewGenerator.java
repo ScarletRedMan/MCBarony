@@ -28,9 +28,12 @@ public class StructureViewGenerator implements PrettyGenerator {
         this.objects = objects;
     }
 
-    @NotNull
+    public static @NotNull StructureViewGenerator createEmpty(int xSize, int ySize, int zSize, GridPlacer.Mode mode) {
+        return new StructureViewGenerator(xSize, ySize, zSize, mode, new GameObject[xSize][ySize][zSize]);
+    }
+
     @Override
-    public String name() {
+    public @NotNull String name() {
         return "structure_view";
     }
 

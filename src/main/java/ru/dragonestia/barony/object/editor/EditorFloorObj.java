@@ -7,8 +7,14 @@ import cn.nukkit.utils.DyeColor;
 import org.jetbrains.annotations.NotNull;
 import ru.dragonestia.barony.level.grid.GridPlacer;
 import ru.dragonestia.barony.object.GameObject;
+import ru.dragonestia.barony.object.HiddenGameObject;
 
-public class EditorFloorObj implements GameObject {
+public class EditorFloorObj implements HiddenGameObject {
+
+    @Override
+    public @NotNull String id() {
+        return "dev_floor";
+    }
 
     @Override
     public void placeForGame(@NotNull GridPlacer.Placement placement) {
