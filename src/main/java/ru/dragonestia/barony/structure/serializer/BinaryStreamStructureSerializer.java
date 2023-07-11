@@ -8,6 +8,7 @@ import ru.dragonestia.barony.structure.Structure;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.HashMap;
 import java.util.HashSet;
 
 @Singleton
@@ -90,6 +91,44 @@ public class BinaryStreamStructureSerializer implements StructureSerializer {
     @NotNull
     @Override
     public Structure deserialize(@NotNull byte[] bytes) {
-        return null;
+        var buffer = new BinaryStream(bytes);
+
+        var xLen = buffer.getInt();
+        var yLen = buffer.getInt();
+        var zLen = buffer.getInt();
+        GameObject[][][] objects = new GameObject[xLen][zLen][yLen];
+
+        var paletteSize = buffer.getInt();
+        var palette = new HashMap<Integer, GameObject>();
+        palette.put(ObjectRegistry.AIR, null);
+        for (int i = 0; i < paletteSize; i++) {
+            var runtimeId = buffer.getInt();
+            var permanentId = buffer.getString();
+            GameObject object;
+
+            try {
+                object = objectRegistry.findById(permanentId);
+            } catch (IllegalArgumentException ex) {
+                object = null;
+            }
+
+            palette.put(runtimeId, object);
+        }
+
+        for (int x = 0; x < xLen; x++) {
+            for (int z = 0; z < zLen; z++) {
+                for (int y = 0; y < yLen; y++) {
+                    var object = palette.getOrDefault(buffer.getInt(), null);
+
+                    objects[x][z][y] = object;
+                }
+            }
+        }
+
+        var structure = new Structure(objects);
+        if (buffer.getByte() == END) return structure;
+
+        // ...
+        return structure;
     }
 }
