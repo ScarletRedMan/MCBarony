@@ -62,6 +62,10 @@ public class InMemoryLevelProvider implements LevelProvider {
         this.generator = generator;
     }
 
+    public @NotNull PrettyGenerator getPrettyGenerator() {
+        return generator;
+    }
+
     // Я в рот шатал того, кто придумал использовать рефлексию
     @UsedByReflection
     public static String getProviderName() {

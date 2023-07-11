@@ -10,6 +10,7 @@ import ru.dragonestia.barony.level.grid.GridPos;
 import ru.dragonestia.barony.object.GameObject;
 import ru.dragonestia.barony.object.editor.EditorBorderObj;
 import ru.dragonestia.barony.object.editor.EditorFloorObj;
+import ru.dragonestia.barony.structure.WorldStructure;
 
 public class StructureViewGenerator implements PrettyGenerator {
 
@@ -20,18 +21,18 @@ public class StructureViewGenerator implements PrettyGenerator {
     private final GameObject floorObj = new EditorFloorObj();
     private final GameObject borderObj = new EditorBorderObj();
     private final GridPlacer.Mode mode;
-    private final GameObject[][][] objects; // XZY
+    private final WorldStructure world;
 
-    public StructureViewGenerator(int xSize, int ySize, int zSize, GridPlacer.Mode mode, GameObject[][][] objects) {
+    public StructureViewGenerator(int xSize, int ySize, int zSize, @NotNull GridPlacer.Mode mode, @NotNull WorldStructure world) {
         this.xSize = xSize;
         this.ySize = ySize;
         this.zSize = zSize;
         this.mode = mode;
-        this.objects = objects;
+        this.world = world;
     }
 
     public static @NotNull StructureViewGenerator createEmpty(int xSize, int ySize, int zSize, GridPlacer.Mode mode) {
-        return new StructureViewGenerator(xSize, ySize, zSize, mode, new GameObject[xSize][ySize][zSize]);
+        return new StructureViewGenerator(xSize, ySize, zSize, mode, new WorldStructure(xSize, ySize, zSize));
     }
 
     @Override
@@ -47,6 +48,7 @@ public class StructureViewGenerator implements PrettyGenerator {
         int sz = chunkZ << 4;
         var start = GridPos.of(new Vector3(sx, Y_FLOOR + 1, sz), Y_FLOOR);
         var gridPlacer = new GridPlacer(level, chunkX, chunkZ, Y_FLOOR, mode);
+        var objects = world.getObjects();
 
         for (int dx = 0; dx < OBJECTS_PER_CHUNK; dx++) {
             int objX = start.x() + dx;
@@ -97,5 +99,9 @@ public class StructureViewGenerator implements PrettyGenerator {
         rules.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
         rules.setGameRule(GameRule.NATURAL_REGENERATION, false);
         return rules;
+    }
+
+    public @NotNull WorldStructure getWorld() {
+        return world;
     }
 }
