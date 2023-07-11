@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
@@ -25,6 +26,8 @@ public class DiskObjectRegistry implements ObjectRegistry {
     private Path dataFolder;
 
     private final ConcurrentHashMap<String, GameObject> objects = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<GameObject, Integer> object2runtimeId = new ConcurrentHashMap<>();
+    private final AtomicInteger freeRuntimeId = new AtomicInteger(1);
 
     @Override
     public @NotNull GameObject findById(@NotNull String id) throws IllegalArgumentException {
@@ -37,6 +40,7 @@ public class DiskObjectRegistry implements ObjectRegistry {
     @Override
     public void register(@NotNull GameObject obj) {
         objects.put(obj.id(), obj);
+        object2runtimeId.put(obj, freeRuntimeId.getAndIncrement());
     }
 
     @Override
@@ -70,5 +74,10 @@ public class DiskObjectRegistry implements ObjectRegistry {
         Arrays.stream(Objects.requireNonNull(objectsFolder.list((file, name) -> file.isDirectory())))
                 .map(this::load)
                 .forEach(this::register);
+    }
+
+    @Override
+    public int getRuntimeIdFor(@NotNull GameObject object) {
+        return object2runtimeId.getOrDefault(object, 0);
     }
 }

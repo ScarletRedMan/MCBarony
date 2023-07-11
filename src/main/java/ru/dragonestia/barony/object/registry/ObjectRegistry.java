@@ -8,6 +8,8 @@ import ru.dragonestia.barony.object.editor.EditorFloorObj;
 
 public interface ObjectRegistry {
 
+    int AIR = 0;
+
     @NotNull GameObject findById(@NotNull String id) throws IllegalArgumentException;
 
     void register(@NotNull GameObject obj);
@@ -22,4 +24,6 @@ public interface ObjectRegistry {
         registry.register(new EditorBorderObj());
         registry.register(new EditorFloorObj());
     }
+
+    int getRuntimeIdFor(@NotNull GameObject object);
 }
