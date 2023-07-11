@@ -78,6 +78,6 @@ public class DiskObjectRegistry implements ObjectRegistry {
 
     @Override
     public int getRuntimeIdFor(@NotNull GameObject object) {
-        return object2runtimeId.getOrDefault(object, 0);
+        return object2runtimeId.getOrDefault(object, AIR);
     }
 }

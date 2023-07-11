@@ -52,4 +52,16 @@ public class Structure {
 
         objects[x][z][y] = object;
     }
+
+    public final int getXLen() {
+        return xLen;
+    }
+
+    public final int getYLen() {
+        return yLen;
+    }
+
+    public final int getZLen() {
+        return zLen;
+    }
 }
