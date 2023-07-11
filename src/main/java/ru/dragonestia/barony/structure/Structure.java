@@ -5,7 +5,7 @@ import ru.dragonestia.barony.object.GameObject;
 
 public class Structure {
 
-    private final GameObject[][][] objects; //XZY
+    private final GameObject[][][] objects; // XZY
     private final int xLen;
     private final int yLen;
     private final int zLen;
@@ -48,7 +48,7 @@ public class Structure {
     }
 
     public void place(@NotNull GameObject object, int x, int y, int z) {
-        if (xLen >= x || yLen >= y || zLen >- z) return;
+        if (xLen >= x || yLen >= y || zLen > -z) return;
 
         objects[x][z][y] = object;
     }

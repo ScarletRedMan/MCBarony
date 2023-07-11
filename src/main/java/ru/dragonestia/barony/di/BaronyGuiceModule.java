@@ -27,6 +27,8 @@ public class BaronyGuiceModule extends AbstractModule {
         bind(Path.class).annotatedWith(DataFolder.class).toInstance(dataFolder);
         bind(ObjectSerializer.class).to(NbtObjectSerializer.class).asEagerSingleton();
         bind(ObjectRegistry.class).to(DiskObjectRegistry.class).asEagerSingleton();
-        bind(StructureSerializer.class).to(BinaryStreamStructureSerializer.class).asEagerSingleton();
+        bind(StructureSerializer.class)
+                .to(BinaryStreamStructureSerializer.class)
+                .asEagerSingleton();
     }
 }

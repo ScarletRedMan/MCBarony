@@ -1,15 +1,14 @@
 package ru.dragonestia.barony.structure.serializer;
 
 import cn.nukkit.utils.BinaryStream;
+import java.util.HashMap;
+import java.util.HashSet;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 import ru.dragonestia.barony.object.GameObject;
 import ru.dragonestia.barony.object.registry.ObjectRegistry;
 import ru.dragonestia.barony.structure.Structure;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import java.util.HashMap;
-import java.util.HashSet;
 
 @Singleton
 public class BinaryStreamStructureSerializer implements StructureSerializer {
@@ -37,20 +36,19 @@ public class BinaryStreamStructureSerializer implements StructureSerializer {
         this.objectRegistry = objectRegistry;
     }
 
-    private final static byte END = 0x00;
+    private static final byte END = 0x00;
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public byte[] serialize(@NotNull Structure structure) {
         var buffer = new BinaryStream();
         var objects = structure.getObjects();
 
-        //Size
+        // Size
         buffer.putInt(structure.getXLen());
         buffer.putInt(structure.getYLen());
         buffer.putInt(structure.getZLen());
 
-        //Palette content
+        // Palette content
         var unique = new HashSet<GameObject>();
         for (int x = 0; x < structure.getXLen(); x++) {
             for (int z = 0; z < structure.getZLen(); z++) {
@@ -88,8 +86,7 @@ public class BinaryStreamStructureSerializer implements StructureSerializer {
         return buffer.getBuffer();
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public Structure deserialize(@NotNull byte[] bytes) {
         var buffer = new BinaryStream(bytes);
 

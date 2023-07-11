@@ -23,7 +23,8 @@ public class StructureViewGenerator implements PrettyGenerator {
     private final GridPlacer.Mode mode;
     private final WorldStructure world;
 
-    public StructureViewGenerator(int xSize, int ySize, int zSize, @NotNull GridPlacer.Mode mode, @NotNull WorldStructure world) {
+    public StructureViewGenerator(
+            int xSize, int ySize, int zSize, @NotNull GridPlacer.Mode mode, @NotNull WorldStructure world) {
         this.xSize = xSize;
         this.ySize = ySize;
         this.zSize = zSize;
