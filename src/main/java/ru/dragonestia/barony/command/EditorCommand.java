@@ -3,22 +3,24 @@ package ru.dragonestia.barony.command;
 import cn.nukkit.Player;
 import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
-import cn.nukkit.utils.TextFormat;
 import javax.inject.Inject;
 import org.jetbrains.annotations.NotNull;
-import ru.dragonestia.barony.object.registry.ObjectRegistry;
+import ru.dragonestia.barony.object.GameObject;
 import ru.dragonestia.barony.structure.EditorService;
+import ru.dragonestia.barony.structure.Structure;
+import ru.dragonestia.barony.structure.WorldStructure;
+import ru.dragonestia.barony.structure.registry.StructureRegistry;
 
 public class EditorCommand extends Command {
 
-    private final ObjectRegistry objectRegistry;
+    private final StructureRegistry structureRegistry;
     private final EditorService editorService;
 
     @Inject
-    public EditorCommand(ObjectRegistry objectRegistry, EditorService editorService) {
+    public EditorCommand(StructureRegistry structureRegistry, EditorService editorService) {
         super("editor", "Редактор структур", "/editor", new String[0]);
 
-        this.objectRegistry = objectRegistry;
+        this.structureRegistry = structureRegistry;
         this.editorService = editorService;
     }
 
@@ -26,10 +28,11 @@ public class EditorCommand extends Command {
     public boolean execute(CommandSender sender, String commandLabel, String[] args) {
         if (sender instanceof Player player) {
             if (args.length == 0) {
-                player.sendMessage("/editor create <Id структуры> <xLen> <yLen> <zLen>");
-                player.sendMessage("/editor check <Id структуры>");
-                player.sendMessage("/editor edit <Id структуры>");
-                player.sendMessage("/editor save");
+                player.sendMessage("/editor create <Id структуры> <xLen> <yLen> <zLen> - Создать новую структуру");
+                player.sendMessage("/editor check <Id структуры> - Проверить существование структуры");
+                player.sendMessage("/editor edit <Id структуры> - Редактировать структуру");
+                player.sendMessage("/editor save - Сохранить текущую структуру");
+                player.sendMessage("/editor close - Выгрузить текущую структуру из памяти");
                 return true;
             }
 
@@ -82,7 +85,9 @@ public class EditorCommand extends Command {
 
                 case "save" -> save(player);
 
-                default -> player.sendMessage(TextFormat.RED + "Нет такой суб-команды!");
+                case "close" -> close(player);
+
+                default -> player.sendMessage("Нет такой суб-команды!");
             }
             return true;
         }
@@ -91,11 +96,56 @@ public class EditorCommand extends Command {
         return false;
     }
 
-    private void create(@NotNull Player player, @NotNull String identifier, int xLen, int yLen, int zLen) {}
+    private void create(@NotNull Player player, @NotNull String identifier, int xLen, int yLen, int zLen) {
+        if (editorService.checkStructure(identifier)) {
+            player.sendMessage("Структура '" + identifier + "' уже существует!");
+            return;
+        }
 
-    private void check(@NotNull Player player, @NotNull String identifier) {}
+        if (editorService.isEditingRightNow(identifier)) {
+            player.sendMessage("Структуру '" + identifier + "' уже создали и сейчас редактируют");
+            return;
+        }
 
-    private void edit(@NotNull Player player, @NotNull String identifier) {}
+        var level = editorService.createEditorLevel(identifier, new Structure(new GameObject[xLen][zLen][yLen]));
+        player.teleport(level.getSafeSpawn());
+        player.setGamemode(Player.CREATIVE);
+    }
 
-    private void save(@NotNull Player player) {}
+    private void check(@NotNull Player player, @NotNull String identifier) {
+        var result = editorService.checkStructure(identifier) ? "не существует" : "существует";
+        player.sendMessage("Структура '" + identifier + "' " + result);
+    }
+
+    private void edit(@NotNull Player player, @NotNull String identifier) {
+        Structure structure;
+        try {
+            structure = structureRegistry.findById(identifier);
+        } catch (IllegalArgumentException ex) {
+            player.sendMessage("Структура '" + identifier + "' не найдена!");
+            return;
+        }
+
+        var level = editorService.createEditorLevel(identifier, structure);
+
+        player.teleport(level.getSafeSpawn());
+        player.sendMessage("Перемещение в редактор стуктуры '" + identifier + "'");
+    }
+
+    private void save(@NotNull Player player) {
+        var level = player.getLevel();
+        WorldStructure structure;
+        try {
+            structure = WorldStructure.of(level);
+        } catch (IllegalArgumentException ex) {
+            throw new IllegalStateException("Player is not at editor");
+        }
+
+        structureRegistry.save(structure.getIdentifier(), structure);
+    }
+
+    private void close(@NotNull Player player) {
+        player.sendMessage("Структура была выгружена из памяти");
+        editorService.close(player.getLevel());
+    }
 }

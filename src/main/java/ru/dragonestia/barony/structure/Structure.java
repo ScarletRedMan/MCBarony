@@ -27,8 +27,6 @@ public class Structure {
     }
 
     public void place(@NotNull Structure structure, int x, int y, int z) {
-        var targetObjects = structure.objects;
-
         for (int tx = 0; tx < structure.yLen; tx++) {
             int gx = x + tx;
             if (gx >= xLen) continue;
@@ -41,7 +39,7 @@ public class Structure {
                     int gy = y + ty;
                     if (gy >= yLen) continue;
 
-                    objects[gx][gz][gy] = targetObjects[tx][tz][ty];
+                    objects[gx][gz][gy] = structure.objects[tx][tz][ty];
                 }
             }
         }

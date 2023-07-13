@@ -32,8 +32,13 @@ public class StructureViewGenerator implements PrettyGenerator {
         this.world = world;
     }
 
-    public static @NotNull StructureViewGenerator createEmpty(int xSize, int ySize, int zSize, GridPlacer.Mode mode) {
-        return new StructureViewGenerator(xSize, ySize, zSize, mode, new WorldStructure(xSize, ySize, zSize));
+    public static @NotNull StructureViewGenerator createEmpty(@NotNull String identifier, int xSize, int ySize, int zSize, GridPlacer.Mode mode) {
+        return new StructureViewGenerator(xSize, ySize, zSize, mode, new WorldStructure(identifier, xSize, ySize, zSize));
+    }
+
+    public static @NotNull StructureViewGenerator createFrom(@NotNull WorldStructure structure, @NotNull GridPlacer.Mode mode) {
+        return new StructureViewGenerator(
+                structure.getXLen(), structure.getYLen(), structure.getZLen(), mode, structure);
     }
 
     @Override

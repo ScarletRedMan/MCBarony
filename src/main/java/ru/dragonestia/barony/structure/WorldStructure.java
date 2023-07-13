@@ -8,12 +8,19 @@ import ru.dragonestia.barony.object.GameObject;
 
 public final class WorldStructure extends Structure {
 
-    public WorldStructure(int xLen, int yLen, int zLen) {
-        this(new GameObject[xLen][zLen][yLen]);
+    private final String identifier;
+
+    public WorldStructure(@NotNull String identifier, @NotNull Structure structure) {
+        this(identifier, structure.getObjects());
     }
 
-    public WorldStructure(@NotNull GameObject[][][] objects) {
+    public WorldStructure(@NotNull String identifier, int xLen, int yLen, int zLen) {
+        this(identifier, new GameObject[xLen][zLen][yLen]);
+    }
+
+    public WorldStructure(@NotNull String identifier, @NotNull GameObject[][][] objects) {
         super(objects);
+        this.identifier = identifier;
     }
 
     public static @NotNull WorldStructure of(@NotNull Level level) {
@@ -24,5 +31,9 @@ public final class WorldStructure extends Structure {
         }
 
         throw new IllegalArgumentException("It's not a structure level");
+    }
+
+    public @NotNull String getIdentifier() {
+        return identifier;
     }
 }

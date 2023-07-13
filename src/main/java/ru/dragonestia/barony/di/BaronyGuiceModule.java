@@ -8,6 +8,7 @@ import ru.dragonestia.barony.object.registry.DiskObjectRegistry;
 import ru.dragonestia.barony.object.registry.ObjectRegistry;
 import ru.dragonestia.barony.object.serializer.NbtObjectSerializer;
 import ru.dragonestia.barony.object.serializer.ObjectSerializer;
+import ru.dragonestia.barony.structure.EditorService;
 import ru.dragonestia.barony.structure.registry.StorageStructureRegistry;
 import ru.dragonestia.barony.structure.registry.StructureRegistry;
 import ru.dragonestia.barony.structure.serializer.BinaryStreamStructureSerializer;
@@ -33,5 +34,6 @@ public class BaronyGuiceModule extends AbstractModule {
         bind(StructureSerializer.class)
                 .to(BinaryStreamStructureSerializer.class)
                 .asEagerSingleton();
+        bind(EditorService.class).asEagerSingleton();
     }
 }

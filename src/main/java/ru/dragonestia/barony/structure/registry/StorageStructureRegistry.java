@@ -58,7 +58,12 @@ public class StorageStructureRegistry implements StructureRegistry {
     }
 
     @Override
-    public @NotNull Structure findById(@NotNull String identifier) {
-        return structures.get(identifier);
+    public @NotNull Structure findById(@NotNull String identifier) throws IllegalArgumentException {
+        var result = structures.getOrDefault(identifier, null);
+        if (result == null) {
+            throw new IllegalArgumentException("Structure with identifier '" + identifier + "' is not found.");
+        }
+
+        return result;
     }
 }
