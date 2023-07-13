@@ -133,6 +133,7 @@ public class EditorCommand extends Command {
         var level = editorService.createEditorLevel(identifier, structure);
 
         player.teleport(level.getSafeSpawn());
+        player.setGamemode(Player.CREATIVE);
         player.sendMessage("Перемещение в редактор стуктуры '" + identifier + "'");
     }
 
