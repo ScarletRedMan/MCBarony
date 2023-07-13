@@ -46,15 +46,17 @@ public final class EditorService {
     }
 
     public void close(@NotNull Level level) {
+        WorldStructure world;
         try {
-            WorldStructure.of(level);
+            world = WorldStructure.of(level);
         } catch (IllegalArgumentException ex) {
             return;
         }
 
+        editors.remove(world.getIdentifier());
         level.getPlayers().values().forEach(player -> {
             player.teleport(player.getServer().getDefaultLevel().getSafeSpawn());
         });
-        level.getServer().unloadLevel(level);
+        level.unload(true);
     }
 }

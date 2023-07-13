@@ -113,8 +113,12 @@ public class EditorCommand extends Command {
     }
 
     private void check(@NotNull Player player, @NotNull String identifier) {
-        var result = editorService.checkStructure(identifier) ? "не существует" : "существует";
-        player.sendMessage("Структура '" + identifier + "' " + result);
+        String status;
+        if (editorService.checkStructure(identifier)) status = "существует";
+        else if (editorService.isEditingRightNow(identifier)) status = "создается";
+        else status = "не существует";
+
+        player.sendMessage("Структура '" + identifier + "' " + status);
     }
 
     private void edit(@NotNull Player player, @NotNull String identifier) {

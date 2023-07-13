@@ -41,7 +41,7 @@ public class StorageStructureRegistry implements StructureRegistry {
         var filePath = dataFolder.resolve(identifier);
 
         try {
-            structures.put(identifier, serializer.deserialize(Files.readAllBytes(filePath)));
+            register(identifier, serializer.deserialize(Files.readAllBytes(filePath)));
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
@@ -55,6 +55,11 @@ public class StorageStructureRegistry implements StructureRegistry {
         for (var identifier : Objects.requireNonNull(structuresFolder.list((dir, name) -> dir.isDirectory()))) {
             load(identifier);
         }
+    }
+
+    @Override
+    public void register(@NotNull String identifier, @NotNull Structure structure) {
+        structures.put(identifier, structure);
     }
 
     @Override

@@ -11,5 +11,7 @@ public interface StructureRegistry {
 
     void loadAll();
 
+    void register(@NotNull String identifier, @NotNull Structure structure);
+
     @NotNull Structure findById(@NotNull String identifier) throws IllegalArgumentException;
 }
