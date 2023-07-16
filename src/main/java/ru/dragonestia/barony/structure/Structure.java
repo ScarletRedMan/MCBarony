@@ -62,4 +62,18 @@ public class Structure {
     public final int getZLen() {
         return zLen;
     }
+
+    public @NotNull Structure copy() {
+        var content = new GameObject[xLen][zLen][yLen];
+
+        for (int x = 0; x < xLen; x++) {
+            for (int z = 0; z < zLen; z++) {
+                for (int y = 0; y < yLen; y++) {
+                    content[x][z][y] = objects[x][z][y];
+                }
+            }
+        }
+
+        return new Structure(content);
+    }
 }
