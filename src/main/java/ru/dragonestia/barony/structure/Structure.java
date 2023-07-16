@@ -46,7 +46,7 @@ public class Structure {
     }
 
     public void place(@NotNull GameObject object, int x, int y, int z) {
-        if (xLen >= x || yLen >= y || zLen > -z) return;
+        if (xLen <= x || yLen <= y || zLen <= z || x < 0 || y < 0 || z < 0) return;
 
         objects[x][z][y] = object;
     }
