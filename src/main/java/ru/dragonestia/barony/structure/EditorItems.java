@@ -12,6 +12,12 @@ public interface EditorItems {
     String TAG_FIELD = "editor_item";
     String TAG_VALUE_PLACER = "marker";
 
+    static boolean isEditorItem(@NotNull Item item) {
+        var tag = item.getOrCreateNamedTag();
+
+        return tag.exist(TAG_FIELD);
+    }
+
     static boolean isPlacerItem(@NotNull Item item) {
         var tag = item.getOrCreateNamedTag();
 

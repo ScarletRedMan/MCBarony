@@ -6,6 +6,7 @@ import cn.nukkit.event.Listener;
 import cn.nukkit.event.block.BlockBreakEvent;
 import cn.nukkit.event.block.BlockPlaceEvent;
 import cn.nukkit.event.entity.EntityLevelChangeEvent;
+import cn.nukkit.event.player.PlayerDropItemEvent;
 import ru.dragonestia.barony.level.generator.StructureViewGenerator;
 import ru.dragonestia.barony.level.grid.GridPos;
 import ru.dragonestia.barony.object.editor.EditorBorderObj;
@@ -83,5 +84,17 @@ public class EditorEventListener implements Listener {
         }
 
         // ...
+    }
+
+    @EventHandler
+    void onDrop(PlayerDropItemEvent event) {
+        var player = event.getPlayer();
+        var level = player.getLevel();
+
+        if (!StructureViewGenerator.isEditor(level)) return;
+
+        if (EditorItems.isEditorItem(player.getInventory().getItemInHand())) {
+            event.setCancelled();
+        }
     }
 }
