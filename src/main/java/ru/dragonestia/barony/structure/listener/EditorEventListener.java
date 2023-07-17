@@ -7,6 +7,7 @@ import cn.nukkit.event.block.BlockBreakEvent;
 import cn.nukkit.event.block.BlockPlaceEvent;
 import cn.nukkit.event.entity.EntityLevelChangeEvent;
 import cn.nukkit.event.player.PlayerDropItemEvent;
+import cn.nukkit.level.Sound;
 import cn.nukkit.math.Vector3;
 import org.jetbrains.annotations.NotNull;
 import ru.dragonestia.barony.level.generator.StructureViewGenerator;
@@ -61,6 +62,7 @@ public class EditorEventListener implements Listener {
         }
 
         if (EditorItems.isPlacerItem(handItem)) {
+            playPlacerSound(player, event.getBlock());
             world.update(gridPos, null);
             return;
         }
@@ -97,6 +99,7 @@ public class EditorEventListener implements Listener {
 
         if (EditorItems.isPlacerItem(handItem)) {
             world.update(gridPos, new EditorBorderObj()); // TODO: selecting objects
+            playPlacerSound(player, event.getBlock());
             event.setCancelled();
             return;
         }
@@ -120,10 +123,14 @@ public class EditorEventListener implements Listener {
         var start = world.getOffset().add(0, 1, 0);
         var end = world.getOffset()
                 .add(3 * world.getXLen(), 3 * world.getYLen(), 3 * world.getZLen())
-                .subtract(1);
+                .subtract(1, 0, 1);
 
         return (start.x <= pos.x && pos.x <= end.x)
                 && (start.y <= pos.y && pos.y <= end.y)
                 && (start.z <= pos.z && pos.z <= end.z);
+    }
+
+    private void playPlacerSound(@NotNull Player player, @NotNull Vector3 soundSource) {
+        player.getLevel().addSound(soundSource, Sound.DIG_BONE_BLOCK);
     }
 }
