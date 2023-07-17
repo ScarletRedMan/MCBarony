@@ -7,6 +7,8 @@ import cn.nukkit.event.block.BlockBreakEvent;
 import cn.nukkit.event.block.BlockPlaceEvent;
 import cn.nukkit.event.entity.EntityLevelChangeEvent;
 import cn.nukkit.event.player.PlayerDropItemEvent;
+import cn.nukkit.math.Vector3;
+import org.jetbrains.annotations.NotNull;
 import ru.dragonestia.barony.level.generator.StructureViewGenerator;
 import ru.dragonestia.barony.level.grid.GridPos;
 import ru.dragonestia.barony.object.editor.EditorBorderObj;
@@ -40,6 +42,13 @@ public class EditorEventListener implements Listener {
         var world = WorldStructure.of(level);
         var handItem = player.getInventory().getItemInHand();
 
+        if (EditorItems.isEditorItem(handItem)) {
+            if (!isInsideWorld(world, event.getBlock())) {
+                event.setCancelled();
+                return;
+            }
+        }
+
         GridPos gridPos;
         try {
             gridPos = world.gridPosOf(event.getBlock());
@@ -67,6 +76,13 @@ public class EditorEventListener implements Listener {
         if (!StructureViewGenerator.isEditor(level)) return;
         var world = WorldStructure.of(level);
         var handItem = player.getInventory().getItemInHand();
+
+        if (EditorItems.isEditorItem(handItem)) {
+            if (!isInsideWorld(world, event.getBlock())) {
+                event.setCancelled();
+                return;
+            }
+        }
 
         GridPos gridPos;
         try {
@@ -98,5 +114,16 @@ public class EditorEventListener implements Listener {
         if (EditorItems.isEditorItem(player.getInventory().getItemInHand())) {
             event.setCancelled();
         }
+    }
+
+    private boolean isInsideWorld(@NotNull WorldStructure world, @NotNull Vector3 pos) {
+        var start = world.getOffset().add(0, 1, 0);
+        var end = world.getOffset()
+                .add(3 * world.getXLen(), 3 * world.getYLen(), 3 * world.getZLen())
+                .subtract(1);
+
+        return (start.x <= pos.x && pos.x <= end.x)
+                && (start.y <= pos.y && pos.y <= end.y)
+                && (start.z <= pos.z && pos.z <= end.z);
     }
 }

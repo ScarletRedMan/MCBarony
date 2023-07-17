@@ -51,6 +51,10 @@ public final class WorldStructure extends Structure {
         zOffset = z;
     }
 
+    public @NotNull Vector3 getOffset() {
+        return new Vector3(xOffset, yOffset, zOffset);
+    }
+
     public void setPlacer(@NotNull GlobalGridPlacer placer) {
         this.placer = placer;
     }
