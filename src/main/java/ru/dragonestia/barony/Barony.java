@@ -11,6 +11,7 @@ import ru.dragonestia.barony.di.BaronyGuiceModule;
 import ru.dragonestia.barony.level.generator.VoidGenerator;
 import ru.dragonestia.barony.level.provider.InMemoryLevelProvider;
 import ru.dragonestia.barony.object.registry.ObjectRegistry;
+import ru.dragonestia.barony.structure.EditorEventListener;
 import ru.dragonestia.barony.structure.registry.StructureRegistry;
 
 public class Barony extends PluginBase {
@@ -33,6 +34,9 @@ public class Barony extends PluginBase {
 
     @Override
     public void onEnable() {
+        var pluginManager = getServer().getPluginManager();
+        pluginManager.registerEvents(injector.getInstance(EditorEventListener.class), this);
+
         getServer().getCommandMap().registerAll("MCBarony", List.of(injector.getInstance(EditorCommand.class)));
     }
 

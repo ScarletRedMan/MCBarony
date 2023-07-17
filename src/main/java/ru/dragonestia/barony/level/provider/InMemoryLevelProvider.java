@@ -36,14 +36,13 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.function.BiConsumer;
 import java.util.stream.IntStream;
 import lombok.Getter;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.dragonestia.barony.level.generator.PrettyGenerator;
 
 public class InMemoryLevelProvider implements LevelProvider {
 
     @Getter
-    @Setter
     private Level level;
 
     @Getter
@@ -100,6 +99,12 @@ public class InMemoryLevelProvider implements LevelProvider {
     @UsedByReflection
     public static ChunkSection createChunkSection(int y) {
         return new ChunkSection(y);
+    }
+
+    public void setLevel(@Nullable Level level) {
+        this.level = level;
+
+        if (level != null) getPrettyGenerator().provideLevel(level);
     }
 
     @Override

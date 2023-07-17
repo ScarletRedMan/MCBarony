@@ -28,4 +28,6 @@ public interface PrettyGenerator {
     }
 
     void generateChunk(@NotNull ChunkManager level, int chunkX, int chunkZ);
+
+    default void provideLevel(@NotNull Level level) {}
 }

@@ -3,10 +3,13 @@ package ru.dragonestia.barony.level.generator;
 import cn.nukkit.level.ChunkManager;
 import cn.nukkit.level.GameRule;
 import cn.nukkit.level.GameRules;
+import cn.nukkit.level.Level;
 import cn.nukkit.math.Vector3;
 import org.jetbrains.annotations.NotNull;
+import ru.dragonestia.barony.level.grid.GlobalGridPlacer;
 import ru.dragonestia.barony.level.grid.GridPlacer;
 import ru.dragonestia.barony.level.grid.GridPos;
+import ru.dragonestia.barony.level.provider.InMemoryLevelProvider;
 import ru.dragonestia.barony.object.GameObject;
 import ru.dragonestia.barony.object.editor.EditorBorderObj;
 import ru.dragonestia.barony.object.editor.EditorFloorObj;
@@ -30,6 +33,10 @@ public class StructureViewGenerator implements PrettyGenerator {
         this.zSize = zSize;
         this.mode = mode;
         this.world = world;
+
+        var offset = createOffset();
+        world.setOffset((int) offset.getX(), (int) offset.getY(), (int) offset.getZ());
+        world.place(new EditorFloorObj(), 0, 0, 0);
     }
 
     public static @NotNull StructureViewGenerator createEmpty(
@@ -110,7 +117,36 @@ public class StructureViewGenerator implements PrettyGenerator {
         return rules;
     }
 
+    @Override
+    public void provideLevel(@NotNull Level level) {
+        world.setPlacer(new GlobalGridPlacer(level, createOffset(), mode));
+    }
+
+    protected @NotNull Vector3 createOffset() {
+        return new Vector3(3, Y_FLOOR + 3, 3);
+    }
+
     public @NotNull WorldStructure getWorld() {
         return world;
+    }
+
+    public static boolean isEditor(@NotNull Level level) {
+        if (level.getProvider() instanceof InMemoryLevelProvider provider) {
+            if (provider.getPrettyGenerator() instanceof StructureViewGenerator world) {
+                return world.mode == GridPlacer.Mode.EDITOR;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean isGame(@NotNull Level level) {
+        if (level.getProvider() instanceof InMemoryLevelProvider provider) {
+            if (provider.getPrettyGenerator() instanceof StructureViewGenerator world) {
+                return world.mode == GridPlacer.Mode.GAME;
+            }
+        }
+
+        return false;
     }
 }

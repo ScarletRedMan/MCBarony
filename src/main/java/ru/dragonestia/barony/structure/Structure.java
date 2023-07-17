@@ -1,6 +1,7 @@
 package ru.dragonestia.barony.structure;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.dragonestia.barony.object.GameObject;
 
 public class Structure {
@@ -45,7 +46,7 @@ public class Structure {
         }
     }
 
-    public void place(@NotNull GameObject object, int x, int y, int z) {
+    public void place(@Nullable GameObject object, int x, int y, int z) {
         if (xLen <= x || yLen <= y || zLen <= z || x < 0 || y < 0 || z < 0) return;
 
         objects[x][z][y] = object;
