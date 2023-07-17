@@ -1,9 +1,12 @@
 package ru.dragonestia.barony.object;
 
+import java.util.Random;
 import org.jetbrains.annotations.NotNull;
 import ru.dragonestia.barony.level.grid.GridPlacer;
 
 public interface GameObject {
+
+    Random RANDOM = new Random();
 
     @NotNull String id();
 

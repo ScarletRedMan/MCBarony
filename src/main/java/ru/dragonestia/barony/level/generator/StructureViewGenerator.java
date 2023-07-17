@@ -3,13 +3,17 @@ package ru.dragonestia.barony.level.generator;
 import cn.nukkit.level.ChunkManager;
 import cn.nukkit.level.GameRule;
 import cn.nukkit.level.GameRules;
+import cn.nukkit.level.Level;
 import cn.nukkit.math.Vector3;
 import org.jetbrains.annotations.NotNull;
+import ru.dragonestia.barony.level.grid.GlobalGridPlacer;
 import ru.dragonestia.barony.level.grid.GridPlacer;
 import ru.dragonestia.barony.level.grid.GridPos;
+import ru.dragonestia.barony.level.provider.InMemoryLevelProvider;
 import ru.dragonestia.barony.object.GameObject;
 import ru.dragonestia.barony.object.editor.EditorBorderObj;
 import ru.dragonestia.barony.object.editor.EditorFloorObj;
+import ru.dragonestia.barony.structure.WorldStructure;
 
 public class StructureViewGenerator implements PrettyGenerator {
 
@@ -20,18 +24,30 @@ public class StructureViewGenerator implements PrettyGenerator {
     private final GameObject floorObj = new EditorFloorObj();
     private final GameObject borderObj = new EditorBorderObj();
     private final GridPlacer.Mode mode;
-    private final GameObject[][][] objects; // XZY
+    private final WorldStructure world;
 
-    public StructureViewGenerator(int xSize, int ySize, int zSize, GridPlacer.Mode mode, GameObject[][][] objects) {
+    public StructureViewGenerator(
+            int xSize, int ySize, int zSize, @NotNull GridPlacer.Mode mode, @NotNull WorldStructure world) {
         this.xSize = xSize;
         this.ySize = ySize;
         this.zSize = zSize;
         this.mode = mode;
-        this.objects = objects;
+        this.world = world;
+
+        var offset = createOffset();
+        world.setOffset((int) offset.getX(), (int) offset.getY(), (int) offset.getZ());
     }
 
-    public static @NotNull StructureViewGenerator createEmpty(int xSize, int ySize, int zSize, GridPlacer.Mode mode) {
-        return new StructureViewGenerator(xSize, ySize, zSize, mode, new GameObject[xSize][ySize][zSize]);
+    public static @NotNull StructureViewGenerator createEmpty(
+            @NotNull String identifier, int xSize, int ySize, int zSize, GridPlacer.Mode mode) {
+        return new StructureViewGenerator(
+                xSize, ySize, zSize, mode, new WorldStructure(identifier, xSize, ySize, zSize));
+    }
+
+    public static @NotNull StructureViewGenerator createFrom(
+            @NotNull WorldStructure structure, @NotNull GridPlacer.Mode mode) {
+        return new StructureViewGenerator(
+                structure.getXLen(), structure.getYLen(), structure.getZLen(), mode, structure);
     }
 
     @Override
@@ -47,6 +63,7 @@ public class StructureViewGenerator implements PrettyGenerator {
         int sz = chunkZ << 4;
         var start = GridPos.of(new Vector3(sx, Y_FLOOR + 1, sz), Y_FLOOR);
         var gridPlacer = new GridPlacer(level, chunkX, chunkZ, Y_FLOOR, mode);
+        var objects = world.getObjects();
 
         for (int dx = 0; dx < OBJECTS_PER_CHUNK; dx++) {
             int objX = start.x() + dx;
@@ -97,5 +114,38 @@ public class StructureViewGenerator implements PrettyGenerator {
         rules.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
         rules.setGameRule(GameRule.NATURAL_REGENERATION, false);
         return rules;
+    }
+
+    @Override
+    public void provideLevel(@NotNull Level level) {
+        world.setPlacer(new GlobalGridPlacer(level, createOffset(), mode));
+    }
+
+    protected @NotNull Vector3 createOffset() {
+        return new Vector3(3, Y_FLOOR + 3, 3);
+    }
+
+    public @NotNull WorldStructure getWorld() {
+        return world;
+    }
+
+    public static boolean isEditor(@NotNull Level level) {
+        if (level.getProvider() instanceof InMemoryLevelProvider provider) {
+            if (provider.getPrettyGenerator() instanceof StructureViewGenerator world) {
+                return world.mode == GridPlacer.Mode.EDITOR;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean isGame(@NotNull Level level) {
+        if (level.getProvider() instanceof InMemoryLevelProvider provider) {
+            if (provider.getPrettyGenerator() instanceof StructureViewGenerator world) {
+                return world.mode == GridPlacer.Mode.GAME;
+            }
+        }
+
+        return false;
     }
 }

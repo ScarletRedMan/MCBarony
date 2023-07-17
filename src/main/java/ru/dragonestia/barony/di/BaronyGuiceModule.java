@@ -4,10 +4,16 @@ import cn.nukkit.utils.Logger;
 import com.google.inject.AbstractModule;
 import java.nio.file.Path;
 import org.jetbrains.annotations.NotNull;
+import ru.dragonestia.barony.command.MarkerCommand;
 import ru.dragonestia.barony.object.registry.DiskObjectRegistry;
 import ru.dragonestia.barony.object.registry.ObjectRegistry;
 import ru.dragonestia.barony.object.serializer.NbtObjectSerializer;
 import ru.dragonestia.barony.object.serializer.ObjectSerializer;
+import ru.dragonestia.barony.structure.EditorService;
+import ru.dragonestia.barony.structure.registry.StorageStructureRegistry;
+import ru.dragonestia.barony.structure.registry.StructureRegistry;
+import ru.dragonestia.barony.structure.serializer.BinaryStreamStructureSerializer;
+import ru.dragonestia.barony.structure.serializer.StructureSerializer;
 
 public class BaronyGuiceModule extends AbstractModule {
 
@@ -25,5 +31,11 @@ public class BaronyGuiceModule extends AbstractModule {
         bind(Path.class).annotatedWith(DataFolder.class).toInstance(dataFolder);
         bind(ObjectSerializer.class).to(NbtObjectSerializer.class).asEagerSingleton();
         bind(ObjectRegistry.class).to(DiskObjectRegistry.class).asEagerSingleton();
+        bind(StructureRegistry.class).to(StorageStructureRegistry.class).asEagerSingleton();
+        bind(StructureSerializer.class)
+                .to(BinaryStreamStructureSerializer.class)
+                .asEagerSingleton();
+        bind(EditorService.class).asEagerSingleton();
+        bind(MarkerCommand.class).asEagerSingleton();
     }
 }
