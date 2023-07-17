@@ -1,4 +1,4 @@
-package ru.dragonestia.barony.structure;
+package ru.dragonestia.barony.structure.listener;
 
 import cn.nukkit.Player;
 import cn.nukkit.event.EventHandler;
@@ -10,6 +10,8 @@ import cn.nukkit.event.player.PlayerDropItemEvent;
 import ru.dragonestia.barony.level.generator.StructureViewGenerator;
 import ru.dragonestia.barony.level.grid.GridPos;
 import ru.dragonestia.barony.object.editor.EditorBorderObj;
+import ru.dragonestia.barony.structure.EditorItems;
+import ru.dragonestia.barony.structure.WorldStructure;
 
 public class EditorEventListener implements Listener {
 

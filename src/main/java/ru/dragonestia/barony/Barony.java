@@ -11,7 +11,7 @@ import ru.dragonestia.barony.di.BaronyGuiceModule;
 import ru.dragonestia.barony.level.generator.VoidGenerator;
 import ru.dragonestia.barony.level.provider.InMemoryLevelProvider;
 import ru.dragonestia.barony.object.registry.ObjectRegistry;
-import ru.dragonestia.barony.structure.EditorEventListener;
+import ru.dragonestia.barony.structure.listener.EditorEventListener;
 import ru.dragonestia.barony.structure.registry.StructureRegistry;
 
 public class Barony extends PluginBase {
