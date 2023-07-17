@@ -36,7 +36,6 @@ public class StructureViewGenerator implements PrettyGenerator {
 
         var offset = createOffset();
         world.setOffset((int) offset.getX(), (int) offset.getY(), (int) offset.getZ());
-        world.place(new EditorFloorObj(), 0, 0, 0);
     }
 
     public static @NotNull StructureViewGenerator createEmpty(

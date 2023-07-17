@@ -79,4 +79,12 @@ public final class WorldStructure extends Structure {
     public void update(int x, int y, int z, @Nullable GameObject gameObject) {
         update(GridPos.of(x, y, z), gameObject);
     }
+
+    public @Nullable GameObject get(@NotNull GridPos pos) {
+        return get(pos.x(), pos.y(), pos.z());
+    }
+
+    public @Nullable GameObject get(int x, int y, int z) {
+        return getObjects()[x][z][y];
+    }
 }

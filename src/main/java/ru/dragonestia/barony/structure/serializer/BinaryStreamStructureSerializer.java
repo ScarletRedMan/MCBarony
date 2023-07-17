@@ -49,21 +49,23 @@ public class BinaryStreamStructureSerializer implements StructureSerializer {
         buffer.putInt(structure.getZLen());
 
         // Palette content
-        var unique = new HashSet<GameObject>();
+        var unique = new HashSet<String>();
         for (int x = 0; x < structure.getXLen(); x++) {
             for (int z = 0; z < structure.getZLen(); z++) {
                 for (int y = 0; y < structure.getYLen(); y++) {
                     var object = objects[x][z][y];
 
                     if (object == null) continue;
-                    unique.add(object);
+                    unique.add(object.id());
                 }
             }
         }
         buffer.putInt(unique.size());
-        unique.forEach(object -> {
-            buffer.putInt(objectRegistry.getRuntimeIdFor(object));
-            buffer.putString(object.id());
+        unique.forEach(objectId -> {
+            var runtimeId = objectRegistry.getRuntimeIdFor(objectRegistry.findById(objectId));
+
+            buffer.putInt(runtimeId);
+            buffer.putString(objectId);
         });
 
         for (int x = 0; x < structure.getXLen(); x++) {
