@@ -1,5 +1,6 @@
 package ru.dragonestia.barony.object.registry;
 
+import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import ru.dragonestia.barony.object.GameObject;
 import ru.dragonestia.barony.object.SchematicGameObject;
@@ -38,4 +39,6 @@ public interface ObjectRegistry {
     }
 
     int getRuntimeIdFor(@NotNull GameObject object);
+
+    @NotNull List<String> getObjectIds();
 }

@@ -4,6 +4,7 @@ import cn.nukkit.utils.Logger;
 import com.google.inject.AbstractModule;
 import java.nio.file.Path;
 import org.jetbrains.annotations.NotNull;
+import ru.dragonestia.barony.command.MarkerCommand;
 import ru.dragonestia.barony.object.registry.DiskObjectRegistry;
 import ru.dragonestia.barony.object.registry.ObjectRegistry;
 import ru.dragonestia.barony.object.serializer.NbtObjectSerializer;
@@ -35,5 +36,6 @@ public class BaronyGuiceModule extends AbstractModule {
                 .to(BinaryStreamStructureSerializer.class)
                 .asEagerSingleton();
         bind(EditorService.class).asEagerSingleton();
+        bind(MarkerCommand.class).asEagerSingleton();
     }
 }

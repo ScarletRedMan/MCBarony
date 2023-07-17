@@ -7,16 +7,21 @@ import cn.nukkit.event.block.BlockBreakEvent;
 import cn.nukkit.event.block.BlockPlaceEvent;
 import cn.nukkit.event.entity.EntityLevelChangeEvent;
 import cn.nukkit.event.player.PlayerDropItemEvent;
+import cn.nukkit.event.player.PlayerQuitEvent;
 import cn.nukkit.level.Sound;
 import cn.nukkit.math.Vector3;
+import javax.inject.Inject;
 import org.jetbrains.annotations.NotNull;
+import ru.dragonestia.barony.command.MarkerCommand;
 import ru.dragonestia.barony.level.generator.StructureViewGenerator;
 import ru.dragonestia.barony.level.grid.GridPos;
-import ru.dragonestia.barony.object.editor.EditorBorderObj;
 import ru.dragonestia.barony.structure.EditorItems;
 import ru.dragonestia.barony.structure.WorldStructure;
 
 public class EditorEventListener implements Listener {
+
+    @Inject
+    private MarkerCommand markers;
 
     @EventHandler
     void onChangeLevel(EntityLevelChangeEvent event) {
@@ -26,9 +31,12 @@ public class EditorEventListener implements Listener {
 
         if (event.getEntity() instanceof Player player) {
             player.getInventory().clearAll();
+            markers.quit(player);
+
             if (StructureViewGenerator.isEditor(event.getTarget())) {
                 var inv = player.getInventory();
 
+                markers.join(player);
                 inv.addItem(EditorItems.createPlacerItem());
             }
         }
@@ -98,7 +106,7 @@ public class EditorEventListener implements Listener {
         }
 
         if (EditorItems.isPlacerItem(handItem)) {
-            world.update(gridPos, new EditorBorderObj()); // TODO: selecting objects
+            world.update(gridPos, markers.get(player));
             playPlacerSound(player, event.getBlock());
             event.setCancelled();
             return;
@@ -117,6 +125,11 @@ public class EditorEventListener implements Listener {
         if (EditorItems.isEditorItem(player.getInventory().getItemInHand())) {
             event.setCancelled();
         }
+    }
+
+    @EventHandler
+    void onQuit(PlayerQuitEvent event) {
+        markers.quit(event.getPlayer());
     }
 
     private boolean isInsideWorld(@NotNull WorldStructure world, @NotNull Vector3 pos) {

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -79,5 +80,10 @@ public class DiskObjectRegistry implements ObjectRegistry {
     @Override
     public int getRuntimeIdFor(@NotNull GameObject object) {
         return object2runtimeId.getOrDefault(object.id(), AIR);
+    }
+
+    @Override
+    public @NotNull List<String> getObjectIds() {
+        return objects.values().stream().map(GameObject::id).toList();
     }
 }

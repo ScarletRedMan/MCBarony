@@ -7,6 +7,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import java.util.List;
 import ru.dragonestia.barony.command.EditorCommand;
+import ru.dragonestia.barony.command.MarkerCommand;
 import ru.dragonestia.barony.di.BaronyGuiceModule;
 import ru.dragonestia.barony.level.generator.VoidGenerator;
 import ru.dragonestia.barony.level.provider.InMemoryLevelProvider;
@@ -37,7 +38,13 @@ public class Barony extends PluginBase {
         var pluginManager = getServer().getPluginManager();
         pluginManager.registerEvents(injector.getInstance(EditorEventListener.class), this);
 
-        getServer().getCommandMap().registerAll("MCBarony", List.of(injector.getInstance(EditorCommand.class)));
+        getServer()
+                .getCommandMap()
+                .registerAll(
+                        "MCBarony",
+                        List.of(injector.getInstance(EditorCommand.class), injector.getInstance(MarkerCommand.class)));
+
+        injector.getInstance(MarkerCommand.class).updateParameters();
     }
 
     private void initObjectRegistry() {
