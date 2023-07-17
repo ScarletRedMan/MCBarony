@@ -26,7 +26,7 @@ public class DiskObjectRegistry implements ObjectRegistry {
     private Path dataFolder;
 
     private final ConcurrentHashMap<String, GameObject> objects = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<GameObject, Integer> object2runtimeId = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Integer> object2runtimeId = new ConcurrentHashMap<>();
     private final AtomicInteger freeRuntimeId = new AtomicInteger(1);
 
     @Override
@@ -40,7 +40,7 @@ public class DiskObjectRegistry implements ObjectRegistry {
     @Override
     public void register(@NotNull GameObject obj) {
         objects.put(obj.id(), obj);
-        object2runtimeId.put(obj, freeRuntimeId.getAndIncrement());
+        object2runtimeId.put(obj.id(), freeRuntimeId.getAndIncrement());
     }
 
     @Override
@@ -78,6 +78,6 @@ public class DiskObjectRegistry implements ObjectRegistry {
 
     @Override
     public int getRuntimeIdFor(@NotNull GameObject object) {
-        return object2runtimeId.getOrDefault(object, AIR);
+        return object2runtimeId.getOrDefault(object.id(), AIR);
     }
 }

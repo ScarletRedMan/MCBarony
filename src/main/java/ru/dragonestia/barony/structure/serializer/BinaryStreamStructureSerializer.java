@@ -38,8 +38,8 @@ public class BinaryStreamStructureSerializer implements StructureSerializer {
 
     private static final byte END = 0x00;
 
-    @NotNull @Override
-    public byte[] serialize(@NotNull Structure structure) {
+    @Override
+    public @NotNull byte[] serialize(@NotNull Structure structure) {
         var buffer = new BinaryStream();
         var objects = structure.getObjects();
 
@@ -88,8 +88,8 @@ public class BinaryStreamStructureSerializer implements StructureSerializer {
         return buffer.getBuffer();
     }
 
-    @NotNull @Override
-    public Structure deserialize(@NotNull byte[] bytes) {
+    @Override
+    public @NotNull Structure deserialize(@NotNull byte[] bytes) {
         var buffer = new BinaryStream(bytes);
 
         var xLen = buffer.getInt();
