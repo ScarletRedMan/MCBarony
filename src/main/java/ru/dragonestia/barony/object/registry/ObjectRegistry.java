@@ -36,6 +36,7 @@ public interface ObjectRegistry {
         registry.register(new StoneBricksSlabFloorObj());
         registry.register(new StoneBricksDecoratedObj());
         registry.register(new PlanksObj());
+        registry.register(new DirtObj());
     }
 
     int getRuntimeIdFor(@NotNull GameObject object);
