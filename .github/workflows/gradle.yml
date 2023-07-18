@@ -28,10 +28,6 @@ jobs:
         java-version: '17'
         distribution: 'corretto'
         
-    - uses: gradle/gradle-build-action@v2
-      with:
-        gradle-version: 8.0
-        
     - name: Codestyle check
       uses: gradle/gradle-build-action@v2
       with:
