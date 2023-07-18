@@ -30,7 +30,7 @@ public class GrassObj implements GameObject {
                         continue;
                     }
 
-                    placement.set(x, y, z, RANDOM.nextBoolean()? dirt1 : dirt2);
+                    placement.set(x, y, z, RANDOM.nextBoolean() ? dirt1 : dirt2);
                 }
             }
         }
